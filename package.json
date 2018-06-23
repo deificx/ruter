@@ -31,7 +31,7 @@
     "useTabs": false
   },
   "scripts": {
-    "build": "webpack -p",
+    "build": "rm -rf dist && webpack -p && cp dist/table* . && cp src/index.html .",
     "start": "webpack-dev-server -d"
   }
 }

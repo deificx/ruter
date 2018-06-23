@@ -2,10 +2,10 @@ const {resolve} = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: resolve(__dirname, 'src', 'index.tsx'),
+  entry: resolve(__dirname, 'src', 'table.tsx'),
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: 'ruter.[hash].js',
+    filename: 'table.[hash].js',
   },
   module: {
     rules: [
@@ -17,7 +17,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(__dirname, 'src', 'index.html'),
+      template: resolve(__dirname, 'src', 'table.html'),
     }),
   ],
 };
