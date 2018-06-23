@@ -4,65 +4,70 @@
 
 <head>
     <title>Ruter</title>
-    <style type="text/css">
-        html {
-            box-sizing: border-box;
-        }
-
-        *,
-        *:before,
-        *:after {
-            box-sizing: inherit;
-        }
-
-        body {
-            background: #000;
-            color: gold;
-            display: flex;
-            font-family: sans-serif;
-            font-size: 200%;
-            margin: 0;
-            width: 100vw;
-            height: 100vh;
-        }
-
-        #ruter {
-            width: 100vw;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100vw;
-        }
-
-        td,
-        th {
-            border-bottom: 1px solid #eee;
-            padding: .5em .5em;
-        }
-
-        .number {
-            text-align: right;
-        }
-
-        th {
-            text-align: left;
-            text-transform: uppercase;
-        }
-
-        span {
-            border-radius: .2em;
-            color: #fff;
-            display: block;
-            font-weight: bold;
-            padding: .1em .4em;
-            text-align: center;
-        }
-    </style>
 </head>
 
 <body>
+    <button is="google-cast-button"></button>
     <div id="ruter"></div>
-<script type="text/javascript" src="ruter.53a5d618c63073985427.js"></script></body>
+    <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+    <script src="//unpkg.com/mithril/mithril.js"></script>
+    <script>
+        const api = (q) => new URL(q, 'https://reisapi.ruter.no/Place/GetPlaces/').toString();
+
+        const Search = {
+            query: '',
+            results: [],
+            get: () => {
+                return m.request({
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    method: 'GET',
+                    url: api(encodeURIComponent(Search.query)),
+                }).then(results => {
+                    Search.results = results.filter(r => r.PlaceType === 'Stop');
+                });
+            },
+        };
+
+        const Ruter = {
+            view: () => {
+                return m('.search', [
+                    m('form', {
+                        onsubmit: e => {
+                            e.preventDefault();
+                            Search.get();
+                        },
+                    }, [
+                            m('input[type=text][placeholder=Søk etter stop]', {
+                                oninput: m.withAttr('value', query => { Search.query = query }),
+                                value: Search.query,
+                            }),
+                            m("button.button[type=submit]", "Søk"),
+                        ]),
+                    Search.results.map(result => {
+                        return m('.search-item', result.ID + ':' + result.Name);
+                    }),
+                ]);
+            },
+        };
+
+        m.mount(window.document.getElementById('ruter'), Ruter);
+
+        const initializeCastApi = () => {
+            cast.framework.CastContext.getInstance().setOptions({
+                receiverApplicationId: '14EF613A',
+                autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+            });
+        };
+
+        window['__onGCastApiAvailable'] = (isAvailable) => {
+            if (isAvailable) {
+                initializeCastApi();
+            }
+        };
+
+    </script>
+</body>
 
 </html>
