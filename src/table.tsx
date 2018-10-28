@@ -119,11 +119,11 @@ class Ruter<P, S> extends React.Component<P, RuterState> {
     return (
       <table id="ruter">
         <colgroup>
-          <col style={{widht: '5%'}} />
-          <col style={{widht: '40%'}} />
-          <col style={{widht: '10%'}} />
-          <col style={{widht: '15%'}} />
-          <col style={{widht: '30%'}} />
+          <col style={{width: '5%'}} />
+          <col style={{width: '40%'}} />
+          <col style={{width: '10%'}} />
+          <col style={{width: '15%'}} />
+          <col style={{width: '30%'}} />
         </colgroup>
         <thead>
           <tr>
